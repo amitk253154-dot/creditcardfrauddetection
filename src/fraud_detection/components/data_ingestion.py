@@ -42,7 +42,7 @@ class DataIngestion:
             )
         except Exception as e:
             logging.info("Excpetion occured while ingesting the data")
-            raise customexception(e,sys)
+            raise CustomException(e,sys)
 if __name__ == "__main__":
     obj = DataIngestion()
     obj.initiate_data_ingestion()
