@@ -218,3 +218,8 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+notebook/data/creditcard.csv
+venu/
+.env
+Artifacts/
+logs/
