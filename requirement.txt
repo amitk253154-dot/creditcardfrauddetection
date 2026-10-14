@@ -4,10 +4,6 @@ scikit-learn
 xgboost
 lightgbm
 optuna
-
-joblib
-flask
-gunicorn
 matplotlib
 seaborn
 statsmodels
