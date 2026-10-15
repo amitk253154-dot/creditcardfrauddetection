@@ -111,4 +111,4 @@ Python, pandas, NumPy, scikit-learn, XGBoost, LightGBM, Optuna, statsmodels, Mat
 
 ## Author
 
-**Amit Kumar** · [GitHub](https://github.com/amitk253154-dot) · [LinkedIn](https://www.linkedin.com/in/your-profile)
+**Amit Kumar** ·
