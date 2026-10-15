@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Predict</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 900px; margin: 30px auto; padding: 0 16px; color: #222; }
+    .card { border: 1px solid #ddd; border-radius: 8px; padding: 16px; margin: 16px 0; }
+    button { padding: 8px 16px; border: 0; border-radius: 6px; background: #2563eb; color: #fff; cursor: pointer; }
+    .red { background: #dc2626; } .green { background: #16a34a; }
+    .error { background: #fee2e2; color: #991b1b; padding: 12px; border-radius: 6px; }
+    .warn { background: #fef3c7; color: #92400e; padding: 12px; border-radius: 6px; }
+    table { border-collapse: collapse; width: 100%; font-size: 14px; }
+    th, td { border: 1px solid #ddd; padding: 6px 8px; text-align: left; }
+    th { background: #f3f4f6; }
+    tr.fraud { background: #fee2e2; font-weight: bold; }
+    .scroll { overflow-x: auto; }
+  </style>
+</head>
+<body>
+  <h1>Fraud Prediction</h1>
+
+  {% if not model_ready %}
+  <p class="warn">Model not found. Run <code>python -m src.fraud_detection.pipelines.training_pipeline</code> first.</p>
+  {% endif %}
+  {% if error %}<p class="error">{{ error }}</p>{% endif %}
+
+  <div class="card">
+    <h3>1. Upload a CSV</h3>
+    <p>Columns needed: Time, V1 to V28, Amount (Class is optional).</p>
+    <form action="/predictdata" method="post" enctype="multipart/form-data">
+      <input type="hidden" name="mode" value="csv">
+      <input type="file" name="file" accept=".csv" required>
+      <button type="submit">Predict</button>
+    </form>
+  </div>
+
+  <div class="card">
+    <h3>2. Try a sample transaction</h3>
+    <form action="/predictdata" method="post">
+      <button class="red" type="submit" name="mode" value="fraud">Random fraud transaction</button>
+      <button class="green" type="submit" name="mode" value="normal">Random normal transaction</button>
+    </form>
+  </div>
+
+  {% if result %}
+  <div class="card">
+    <h3>Result</h3>
+    <p>{{ result.flagged }} of {{ result.total }} transaction(s) flagged as fraud.
+       {% if result.total > result.shown %}Showing the first {{ result.shown }}.{% endif %}</p>
+    <div class="scroll">
+      <table>
+        <tr>{% for c in result.columns %}<th>{{ c }}</th>{% endfor %}</tr>
+        {% for row in result.rows %}
+        <tr class="{{ 'fraud' if 'FRAUD' in row else '' }}">
+          {% for v in row %}<td>{{ v }}</td>{% endfor %}
+        </tr>
+        {% endfor %}
+      </table>
+    </div>
+  </div>
+  {% endif %}
+</body>
+</html>

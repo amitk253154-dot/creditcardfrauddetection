@@ -7,3 +7,5 @@ optuna
 matplotlib
 seaborn
 statsmodels
+flask
+gunicorn
